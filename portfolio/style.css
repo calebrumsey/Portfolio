@@ -1,0 +1,261 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh; /* Must be 100% for full-screen slides */
+    overflow: hidden; /* Hide the default vertical scrollbar */
+    font-family: 'Lato', sans-serif;
+    color: #333;
+}
+
+/* Fixed Header (Always visible on the left/top) */
+.fixed-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 40px; /* Increase horizontal padding slightly */
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(5px);
+    border-bottom: 1px solid #ddd;
+    transition: transform 0.4s ease-out, opacity 0.4s ease-out; 
+    
+    /* 1. FLEXBOX SETUP */
+    display: flex; 
+    /* 2. Pushes the main content (left) and the navigation (right) as far apart as possible */
+    justify-content: space-between; 
+    /* 3. Vertically centers items */
+    align-items: center; 
+}
+
+/* Style the main title content */
+.header-content {
+    /* Ensures h1 and p stay stacked on the left */
+    display: flex;
+    flex-direction: column;
+}
+
+.header-nav .about-link {
+    /* Ensure the link has a defined size to be centered properly */
+    padding: 5px 10px; 
+}
+
+/* Style the new link */
+.header-nav .about-link {
+    text-decoration: none;
+    color: #3498db; /* Your primary color */
+    font-weight: bold;
+    padding: 5px 10px;
+    border: 2px solid #3498db;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.header-nav .about-link:hover {
+    background-color: #3498db;
+    color: white;
+}
+
+.fixed-header h1 {
+    font-size: 1.5em;
+    color: #000;
+}
+
+.fixed-header p {
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* Add this new block to your style.css */
+.fixed-header.hidden {
+    transform: translateY(-100%); /* Move the header completely off the top of the screen */
+    opacity: 0;
+    pointer-events: none; /* Allows clicks to go through the invisible area */
+}
+
+/* Ensure the transition property is on the main header block */
+.fixed-header {
+    /* ... existing styles ... */
+    transition: transform 0.4s ease-out, opacity 0.4s ease-out; /* Smooth animation */
+    /* ... existing styles ... */
+}
+
+
+/* --- Horizontal Scrolling Container (THE KEY) --- */
+.horizontal-scroll-container {
+    height: 100vh; /* Full viewport height */
+    width: 100vw; /* Full viewport width */
+    display: flex; /* Arrange children (slides) horizontally */
+    overflow-x: scroll; /* Enable horizontal scrolling */
+    overflow-y: hidden; /* Hide vertical scrollbar */
+    scroll-snap-type: x mandatory; /* Snap to the start of each project slide */
+    -webkit-overflow-scrolling: touch; /* For smoother scrolling on iOS */
+}
+
+/* Individual Project Slide */
+.project-slide {
+    flex-shrink: 0; 
+    width: 100vw; 
+    height: 100vh;
+    scroll-snap-align: start; 
+    
+    /* FIX HERE: Change 'cover' to 'contain' */
+    background-size: contain; 
+    
+    /* Also set background-color so the edges aren't white if the image doesn't fill the screen */
+    background-color: #222; /* Dark background color (like a gallery wall) */
+    
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* Introduction Slide Styling */
+.intro-slide {
+    background-color: #f0f0f0;
+    text-align: center;
+}
+
+.intro-slide h2 {
+    font-size: 4em;
+    margin-bottom: 10px;
+}
+.intro-slide p {
+    font-size: 1.5em;
+    color: #666;
+}
+
+/* Project Overlay (Title and description on image) */
+.project-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
+    color: white;
+    text-decoration: none;
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.3s ease;
+}
+
+.project-slide:hover .project-overlay {
+    opacity: 1; /* Show on hover */
+}
+
+.project-overlay h3 {
+    font-size: 2em;
+    margin-bottom: 5px;
+}
+
+/* --- Vertical Side Menu Styling --- */
+.side-menu {
+    position: fixed; /* Keeps the menu in place while the rest of the page scrolls */
+    top: 50%; /* Start position from the top */
+    right: 20px; /* Distance from the right edge */
+    transform: translateY(-50%); /* Centers the menu vertically */
+    z-index: 200; /* Ensures it stays above all other elements */
+    
+    display: flex;
+    flex-direction: column; /* Stacks the icons vertically */
+    gap: 15px; /* Space between icons */
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4px);
+}
+
+.side-menu a {
+    color: #666; /* Default icon color */
+    font-size: 1.5em; /* Icon size */
+    transition: color 0.3s ease, transform 0.3s ease;
+    display: block; /* Ensures the whole block is clickable */
+    padding: 5px;
+    text-align: center;
+}
+
+.side-menu a:hover {
+    color: #007bff; /* Highlight color on hover (e.g., a nice blue) */
+    transform: scale(1.1); /* Slight zoom effect on hover */
+}
+
+/* --- Optional: Adjust Fixed Header to avoid collision --- */
+/* If you put the header on the left, you might need to adjust it */
+.fixed-header {
+    /* ... existing styles ... */
+    padding-left: 50px; /* Add padding to account for the menu if needed */
+}
+
+/* Media Query to hide/move the menu on small screens */
+@media (max-width: 600px) {
+    .side-menu {
+        /* Move the menu to the bottom center on small devices */
+        top: auto;
+        bottom: 10px;
+        right: 50%;
+        transform: translateX(50%);
+        flex-direction: row; /* Change to horizontal layout */
+        background: rgba(255, 255, 255, 0.95);
+    }
+}
+
+/* --- Styling for the About Page Layout --- */
+
+/* Basic styling for the back-link */
+.about-page-header {
+    width: 100%;
+    padding: 20px 40px;
+    background-color: #f0f0f0; 
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 40px;
+}
+
+.about-page-header .back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    text-decoration: none;
+    color: #3498db;
+    font-weight: bold;
+}
+
+/* Styling the main content wrapper */
+.about-content {
+    max-width: 800px; 
+    margin: 0 auto;
+    padding: 0 20px 80px 20px;
+    line-height: 1.7;
+    
+    /* NEW: Center the text content */
+    text-align: center; 
+}
+
+/* Styling for the profile picture */
+.profile-pic {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%; /* Make it round */
+    float: right; /* Wrap text around it */
+    margin: 0 0 20px 20px;
+    object-fit: cover;
+}
+
+/* Clear the float after the image */
+.bio-section::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.skills-section ul {
+    list-style-type: square;
+    margin-left: 20px;
+}
